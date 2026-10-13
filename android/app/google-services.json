@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "153930954812",
+    "project_id": "bayanatz-task-ce54e",
+    "storage_bucket": "bayanatz-task-ce54e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153930954812:android:2922764961194569a1ab39",
+        "android_client_info": {
+          "package_name": "com.example.bayanatz_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPoXNjqmeJNstQUv3jxxQWDIxjybvXi_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
