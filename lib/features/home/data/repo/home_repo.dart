@@ -1,26 +1,45 @@
-import '../../../../core/databases/api/api_consumer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/task_board_model.dart';
 
 class HomeRepo {
-  final ApiConsumer api;
+  HomeRepo(this.firestore, this.auth);
 
-  HomeRepo(this.api);
+  final FirebaseFirestore firestore;
+  final FirebaseAuth auth;
 
-  // //! Get User Sessions
-  // Future<Either<String, List<UserSessionModel>>> getUserSessions() async {
-  //   try {
-  //     final response = await api.get(
-  //       EndPoints.getUserSessions,
-  //     );
-  //     final sessions = (response['data']['sessions'] as List? ?? [])
-  //         .map((e) => UserSessionModel.fromJson(e))
-  //         .toList();
-  //     return Right(sessions);
-  //   } on ServerException catch (e) {
-  //     return Left(e.errorModel.detail);
-  //   } on NoInternetException catch (e) {
-  //     return Left(e.errorModel.detail);
-  //   } on Exception catch (e) {
-  //     return Left(e.toString());
-  //   }
-  // }
+  CollectionReference<Map<String, dynamic>> get _boardsCollection =>
+      firestore.collection('task_boards');
+
+  Future<void> ensureSignedIn() async {
+    if (auth.currentUser == null) {
+      await auth.signInAnonymously();
+    }
+  }
+
+  Future<List<TaskBoardModel>> getTaskBoards() async {
+    await ensureSignedIn();
+    final snapshot = await _boardsCollection
+        .orderBy('createdAt', descending: true)
+        .get();
+    return snapshot.docs.map(TaskBoardModel.fromFirestore).toList();
+  }
+
+  Future<void> addTaskBoard(TaskBoardModel board) async {
+    await ensureSignedIn();
+    final userId = auth.currentUser!.uid;
+    final boardToSave = TaskBoardModel(
+      id: board.id,
+      name: board.name,
+      department: board.department,
+      ownershipStatus: board.ownershipStatus,
+      description: board.description,
+      createdAt: DateTime.now(),
+      memberImageUrls: board.memberImageUrls,
+      membersCount: board.membersCount,
+      createdBy: userId,
+    );
+    await _boardsCollection.add(boardToSave.toFirestore());
+  }
 }

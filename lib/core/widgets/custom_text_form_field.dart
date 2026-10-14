@@ -38,6 +38,8 @@ class CustomTextFormField extends StatefulWidget {
     this.style,
     this.inputFormatters,
     this.focusNode,
+    this.readOnly,
+    this.onTap,
   });
   final String? hintText;
   final String? labelText;
@@ -67,6 +69,8 @@ class CustomTextFormField extends StatefulWidget {
   final Duration? debounceDelay;
   final List<TextInputFormatter>? inputFormatters;
   final FocusNode? focusNode;
+  final bool? readOnly;
+  final VoidCallback? onTap;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -106,6 +110,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       maxLines: widget.maxLines,
       validator: widget.validator,
       focusNode: widget.focusNode,
+      readOnly: widget.readOnly ?? false,
+      onTap: widget.onTap,
       onChanged: _onTextChanged,
       style: widget.style ?? CustomTextStyle.font400sized14Black,
       cursorColor: AppColors.primary,
